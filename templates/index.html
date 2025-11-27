@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Background Remover | Instant & Free</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc, #ff8c00);
+            border-radius: 24px 24px 0 0;
+        }
+        
+        h1 {
+            color: #2d3748;
+            margin-bottom: 16px;
+            font-size: 32px;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            border-radius: 2px;
+        }
+        
+        .description {
+            color: #718096;
+            margin-bottom: 32px;
+            line-height: 1.6;
+            font-size: 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .upload-section {
+            margin-bottom: 30px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .file-input-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 3px dashed #cbd5e0;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            width: 100%;
+        }
+        
+        .file-input-label:hover {
+            border-color: #6a11cb;
+            background: #f0f4ff;
+            transform: scale(1.01);
+        }
+        
+        .file-input-label i {
+            font-size: 48px;
+            color: #6a11cb;
+            margin-bottom: 16px;
+        }
+        
+        .file-input-label span {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .file-input-label p {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+        
+        input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .process-btn {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .process-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .process-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .download-btn {
+            background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 176, 155, 0.3);
+            display: none;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0, 176, 155, 0.4);
+        }
+        
+        .reset-btn {
+            background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(255, 65, 108, 0.3);
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(255, 65, 108, 0.4);
+        }
+        
+        .result-section {
+            display: none;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .result-title {
+            font-size: 24px;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .image-box {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        
+        .image-box h3 {
+            margin-bottom: 15px;
+            color: #4a5568;
+            font-size: 18px;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 300px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+            margin: 0 auto;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: transparent;
+        }
+        
+        .features {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .feature i {
+            font-size: 24px;
+            color: #6a11cb;
+            margin-bottom: 8px;
+        }
+        
+        .feature span {
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        
+        .file-name {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 500;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(106, 17, 203, 0.2);
+            border-left: 4px solid #6a11cb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .error-message {
+            background: #fed7d7;
+            color: #c53030;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .file-input-label {
+                padding: 30px 15px;
+            }
+            
+            .features {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .image-container {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Background Remover</h1>
+        <p class="description">Upload your image and our AI will instantly remove the background with perfect precision. Download your result with one click.</p>
+        
+        <div class="upload-section">
+            <div class="error-message" id="error-message"></div>
+            
+            <form id="upload-form">
+                <div class="file-input-wrapper">
+                    <label class="file-input-label" for="image-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose an image file</span>
+                        <p>JPG, PNG up to 10MB</p>
+                    </label>
+                    <input type="file" id="image-upload" name="image" accept="image/jpeg,image/png" required>
+                    <div class="file-name" id="file-name"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="process-btn" id="process-btn">
+                        <i class="fas fa-magic"></i>
+                        Remove Background
+                    </button>
+                    <button type="button" class="download-btn" id="download-btn">
+                        <i class="fas fa-download"></i>
+                        Download Result
+                    </button>
+                    <button type="button" class="reset-btn" id="reset-btn">
+                        <i class="fas fa-redo"></i>
+                        Reset
+                    </button>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Processing your image... This may take a few seconds</p>
+                </div>
+            </form>
+        </div>
+        
+        <div class="result-section" id="result-section">
+            <h2 class="result-title">Background Successfully Removed!</h2>
+            <div class="image-container">
+                <div class="image-box">
+                    <h3>Original Image</h3>
+                    <div class="image-preview" id="original-preview">
+                        No image selected
+                    </div>
+                </div>
+                
+                <div class="image-box">
+                    <h3>Background Removed</h3>
+                    <div class="image-preview" id="result-preview">
+                        Processed image will appear here
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-bolt"></i>
+                <span>Instant Results</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure & Private</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-star"></i>
+                <span>High Quality</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-download"></i>
+                <span>Easy Download</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('image-upload');
+            const fileName = document.getElementById('file-name');
+            const processBtn = document.getElementById('process-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const loading = document.getElementById('loading');
+            const resultSection = document.getElementById('result-section');
+            const originalPreview = document.getElementById('original-preview');
+            const resultPreview = document.getElementById('result-preview');
+            const form = document.getElementById('upload-form');
+            const errorMessage = document.getElementById('error-message');
+            
+            let uploadedImage = null;
+            let processedImage = null;
+            
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    fileName.textContent = file.name;
+                    errorMessage.style.display = 'none';
+                    
+                    // Validate file size (10MB)
+                    if (file.size > 10 * 1024 * 1024) {
+                        showError('File size exceeds 10MB limit');
+                        fileInput.value = '';
+                        fileName.textContent = '';
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedImage = e.target.result;
+                        originalPreview.innerHTML = `<img src="${uploadedImage}" alt="Original Image">`;
+                    };
+                    reader.onerror = function() {
+                        showError('Failed to read file');
+                    };
+                    reader.readAsDataURL(file);
+                    
+                    // Reset result section
+                    resultSection.style.display = 'none';
+                    downloadBtn.style.display = 'none';
+                    resultPreview.innerHTML = 'Processed image will appear here';
+                } else {
+                    fileName.textContent = '';
+                }
+            });
+            
+            // Form submission handler
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    showError('Please upload an image first');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                
+                // Show loading and disable button
+                loading.style.display = 'block';
+                processBtn.disabled = true;
+                errorMessage.style.display = 'none';
+                
+                try {
+                    const response = await fetch('/process', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.error || 'Failed to process image');
+                    }
+                    
+                    // Display result
+                    processedImage = data.image;
+                    resultPreview.innerHTML = `<img src="${processedImage}" alt="Background Removed">`;
+                    resultSection.style.display = 'block';
+                    downloadBtn.style.display = 'flex';
+                    
+                    console.log('Image processed successfully');
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError(error.message || 'Error processing image. Please try again.');
+                } finally {
+                    loading.style.display = 'none';
+                    processBtn.disabled = false;
+                }
+            });
+            
+            // Download button click event
+            downloadBtn.addEventListener('click', function() {
+                if (!processedImage) {
+                    showError('Please process an image first');
+                    return;
+                }
+                
+                const link = document.createElement('a');
+                link.href = processedImage;
+                link.download = 'background-removed.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Show confirmation
+                const originalText = downloadBtn.innerHTML;
+                downloadBtn.innerHTML = '<i class="fas fa-check"></i> Downloaded!';
+                
+                setTimeout(() => {
+                    downloadBtn.innerHTML = originalText;
+                }, 2000);
+            });
+            
+            // Reset button click event
+            resetBtn.addEventListener('click', function() {
+                fileInput.value = '';
+                fileName.textContent = '';
+                originalPreview.innerHTML = 'No image selected';
+                resultPreview.innerHTML = 'Processed image will appear here';
+                resultSection.style.display = 'none';
+                downloadBtn.style.display = 'none';
+                uploadedImage = null;
+                processedImage = null;
+                errorMessage.style.display = 'none';
+                loading.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
